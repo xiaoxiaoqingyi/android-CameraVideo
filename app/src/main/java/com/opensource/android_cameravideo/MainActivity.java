@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,9 +29,14 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import okhttp3.internal.Util;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
         , SurfaceHolder.Callback, MediaRecorder.OnErrorListener{
 
+
+    //存放照片的文件夹
+    public final static String  BASE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video/";
 
     private SurfaceView mSurfaceView;
     private ImageView startBtn;
@@ -328,13 +334,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void createRecordDir() {
         dirname = String.valueOf(System.currentTimeMillis()) +  String.valueOf( new Random().nextInt(1000));
-        File FileDir = new File(Constants.BASE_PATH + dirname);
+        File FileDir = new File(BASE_PATH + dirname);
         if (!FileDir.exists()) {
             FileDir.mkdirs();
         }
         // 创建文件
         try {
-            mVecordFile = new File(FileDir.getAbsolutePath() + "/" + Constants.VEDIO_DEFAULT_NAME);
+            mVecordFile = new File(FileDir.getAbsolutePath() + "/" + Utils.getDateNumber() +".mp4");
             Log.d("Path:", mVecordFile.getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();
@@ -344,11 +350,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     OnRecordFinishListener recordFinishListener = new OnRecordFinishListener() {
         @Override
         public void onRecordFinish() {
-//            Intent intent = new Intent(RecordVideoActivity.this, VedioPlayActivity.class);
-//            intent.putExtra("filePath", mVecordFile.getAbsolutePath());
-//            intent.putExtra("dirname", dirname);
-//            startActivity(intent);
-//            finish();
+            Toast.makeText(MainActivity.this, "拍摄完毕", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -387,12 +389,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(isFlashLightOn){
                 parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                 mCamera.setParameters(parameters);
-//                lightBtn.setImageResource(R.mipmap.camera_light_0);
                 isFlashLightOn = false;
             }else {
                 parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
                 mCamera.setParameters(parameters);
-//                lightBtn.setImageResource(R.mipmap.camera_light_1);
                 isFlashLightOn = true;
             }
         } catch (Exception e) {
