@@ -67,11 +67,6 @@
                 android:src="@drawable/record_starting_anim"/>
         </FrameLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/camera_prompt"
-            android:layout_centerInParent="true"/>
 
         <FrameLayout
             android:layout_width="wrap_content"
